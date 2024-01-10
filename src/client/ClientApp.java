@@ -1,6 +1,8 @@
 package client;
 
 
+
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -15,7 +17,7 @@ public class ClientApp {
         String reply = "empty";
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your message: ");
-        UUID name = UUID.randomUUID();
+        //UUID name = UUID.randomUUID();
 
         try (Socket socket = new Socket("localhost", 2222)) {
             PrintWriter cout = new PrintWriter(socket.getOutputStream(), true);
@@ -23,20 +25,25 @@ public class ClientApp {
             Client threadClient = new Client(socket);
             new Thread(threadClient).start(); // start thread to receive message
 
-            do {
-                String message = ("ID " + name + " : ");
+            while (true){
+                String message = ("Message from other client:");
                 reply = sc.nextLine();
                 if (reply.equals("exit")) {
                     cout.println("exit");
                     break;
                 }
+                if(reply.equals("send")){
+                    FileClient client = new FileClient("localhost",8080);
+                    client.start();
+                }
                 cout.println(message + reply);
-            } while (!reply.equals("exit"));
+            }
         } catch (Exception e) {
             System.out.println(e.getStackTrace());
         }
     }
 
-    }
+}
+
 
 

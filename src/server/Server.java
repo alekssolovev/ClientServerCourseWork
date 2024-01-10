@@ -1,6 +1,7 @@
 package server;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
@@ -12,6 +13,7 @@ public class Server extends Thread{
 
     private Socket socket;
     private ArrayList<Socket> clients;
+    String filename;
     private ConcurrentMap<Socket, UUID> clientNameList;
 
     public Server(Socket socket, ArrayList<Socket> clients, ConcurrentHashMap<Socket, UUID> clientNameList) {
@@ -24,7 +26,7 @@ public class Server extends Thread{
     public void run() {
         try {
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
+            filename = "NoName.txt";
 
             while (true) {
                 String outputString = input.readLine();
@@ -33,6 +35,14 @@ public class Server extends Thread{
                 }
                 if (!clientNameList.containsKey(socket)) {
                     clientNameList.put(socket, UUID.randomUUID());
+                } else if (outputString.equals("Message from other client:send")) {
+                    ServerSocket serverSocket = new ServerSocket(8080);
+                    // Принимаем подключение от клиента
+                    Socket clientSocket = serverSocket.accept();
+                    // Создаем новый поток для обработки запроса клиента
+                    Thread thread = new FileServer(clientSocket,filename);
+                    showMessageToAllClients(socket,"Download new file:"+filename);
+                    thread.start();
                 } else {
                     showMessageToAllClients(socket, outputString);
                 }
@@ -68,7 +78,6 @@ public class Server extends Thread{
     }
 
 }
-
 
 
 
