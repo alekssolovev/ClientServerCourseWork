@@ -41,7 +41,8 @@ public class ClientApp {
         } catch (Exception e) {
             System.out.println(e.getStackTrace());
         }
-    }
+    }//Добавить возможность запросить у сервера список имен файлов и
+    //получить описание выбранного файла.
 
 }
 

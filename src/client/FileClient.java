@@ -28,6 +28,7 @@ public class FileClient extends Thread {
             // Отправляем имя файла на сервер
             PrintWriter writer = new PrintWriter(outputStream, true);
             writer.println("NoName.txt");
+            writer.println("The file contains text");
 
             // Читаем данные из файла и отправляем на сервер
             byte[] buffer = new byte[4096];

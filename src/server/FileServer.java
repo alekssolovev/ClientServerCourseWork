@@ -7,13 +7,15 @@ import java.util.concurrent.*;
 public class FileServer extends Thread {
     private Socket clientSocket;
     String filename;
+    String description;
     private final int MAX_FILENAME_LENGTH = 11;
     private final long MAX_FILE_SIZE = 10_000; // 1 MB
-    private ConcurrentMap<String, byte[]> fileStorage = new ConcurrentHashMap<>();
+    private ConcurrentMap<String, String> fileStorage = new ConcurrentHashMap<>();
 
-    public FileServer(Socket socket,String filename) {
+    public FileServer(Socket socket,String filename,String description) {
         clientSocket = socket;
         this.filename = filename;
+        this.description = description;
     }
 
     public void run() {
@@ -26,6 +28,8 @@ public class FileServer extends Thread {
             // Получаем имя файла от клиента
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
              filename = reader.readLine();
+             description = reader.readLine();
+
 
             // Проверяем длину имени файла
             if (filename.length() > MAX_FILENAME_LENGTH) {
@@ -34,6 +38,7 @@ public class FileServer extends Thread {
             }
 
             System.out.println("Received file: " + filename);
+            System.out.println("Description:"+ description);
 
             // Создаем поток для записи файла в память
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -57,7 +62,7 @@ public class FileServer extends Thread {
             }
 
             // Сохраняем файл в коллекции
-            fileStorage.put(filename, outputStream.toByteArray());
+            fileStorage.put(filename, description);
 
             // Закрываем потоки и сокеты
             outputStream.close();

@@ -14,6 +14,7 @@ public class Server extends Thread{
     private Socket socket;
     private ArrayList<Socket> clients;
     String filename;
+    String description;
     private ConcurrentMap<Socket, UUID> clientNameList;
 
     public Server(Socket socket, ArrayList<Socket> clients, ConcurrentHashMap<Socket, UUID> clientNameList) {
@@ -27,6 +28,7 @@ public class Server extends Thread{
         try {
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             filename = "NoName.txt";
+            description = "The file contains text";
 
             while (true) {
                 String outputString = input.readLine();
@@ -40,8 +42,8 @@ public class Server extends Thread{
                     // Принимаем подключение от клиента
                     Socket clientSocket = serverSocket.accept();
                     // Создаем новый поток для обработки запроса клиента
-                    Thread thread = new FileServer(clientSocket,filename);
-                    showMessageToAllClients(socket,"Download new file:"+filename);
+                    Thread thread = new FileServer(clientSocket,filename,description);
+                    showMessageToAllClients(socket,"Download new file:"+filename +":"+ description);
                     thread.start();
                 } else {
                     showMessageToAllClients(socket, outputString);
