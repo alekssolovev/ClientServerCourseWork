@@ -3,7 +3,6 @@ package common;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -23,6 +22,7 @@ public class ConnectionService implements AutoCloseable{
         message.setSentAt(ZonedDateTime.now());
         outputStream.writeObject(message);
         outputStream.flush();
+
     }
 
     public Message readMessage() throws IOException {

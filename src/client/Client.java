@@ -1,16 +1,13 @@
 package client;
 
-import common.ConnectionService;
-import common.Message;
+
 
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 
 
-// При создании клиента в конструктор передается
-// экземпляр InetSocketAddress,
-// который хранит IP сервера и порт.
+
 public class Client  extends Thread{
     private Socket socket;
     private BufferedReader cin;
@@ -29,7 +26,7 @@ public class Client  extends Thread{
 
             }
         } catch (SocketException e) {
-            System.out.println("You left the chat-room");
+            System.out.println("Client disconnnected");
         } catch (IOException exception) {
             System.out.println(exception);
         } finally {

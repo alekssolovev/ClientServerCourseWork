@@ -8,9 +8,15 @@ public class FileClient extends Thread {
     private String hostname;
     private int port;
 
-    public FileClient(String hostname, int port) {
+    private  String command;
+    String filename;
+    String description;
+
+    public FileClient(String hostname, int port,String command) {
         this.hostname = hostname;
         this.port = port;
+        if(command!=null)
+            this.command = command;
     }
 
     public void run() {
@@ -27,8 +33,11 @@ public class FileClient extends Thread {
 
             // Отправляем имя файла на сервер
             PrintWriter writer = new PrintWriter(outputStream, true);
-            writer.println("NoName.txt");
-            writer.println("The file contains text");
+            filename = "NoName.txt";
+            description = "The file contains text";
+
+            writer.println(filename);
+            writer.println(description);
 
             // Читаем данные из файла и отправляем на сервер
             byte[] buffer = new byte[4096];
